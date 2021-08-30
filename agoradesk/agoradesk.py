@@ -91,7 +91,7 @@ class AgoraDesk:
             return result
         except httpx.ConnectError as error:
             result["message"] = error
-            result["status"] = response.status_code
+            result["status"] = 600
             result["response"] = {"error": {"message": error}}
             return result
         except json.decoder.JSONDecodeError:
@@ -145,6 +145,68 @@ class AgoraDesk:
     # Wallet related API Methods
     # ===========================
 
+    def wallet(self) -> dict:
+        return self._api_call(api_method="wallet")
+
+    def wallet_balance(self) -> dict:
+        return self._api_call(api_method="wallet-balance")
+
     def wallet_xmr(self) -> dict:
-        response = self._api_call(api_method="wallet/XMR")
-        return response
+        return self._api_call(api_method="wallet/XMR")
+
+    def wallet_balance_xmr(self) -> dict:
+        return self._api_call(api_method="wallet-balance/XMR")
+
+    def wallet_addr(self) -> dict:
+        return self._api_call(api_method="wallet-addr")
+
+    def wallet_addr_xmr(self) -> dict:
+        return self._api_call(api_method="wallet-addr/XMR")
+
+    def fees(self) -> dict:
+        return self._api_call(api_method="fees")
+
+    def fees_xmr(self) -> dict:
+        return self._api_call(api_method="fees/XMR")
+
+    def wallet_send(
+        self,
+        address: str,
+        amount: float,
+        password: str,
+        fee_level: str,
+        otp: Optional[int] = None,
+    ) -> dict:
+        params = {
+            "address": address,
+            "amount": amount,
+            "password": password,
+            "fee_level": fee_level,
+        }
+        if otp:
+            params["otp"] = otp
+
+        return self._api_call(
+            api_method="wallet-send", http_method="POST", query_values=params
+        )
+
+    def wallet_send_xmr(
+        self,
+        address: str,
+        amount: float,
+        password: str,
+        fee_level: str,
+        otp: Optional[int] = None,
+    ) -> dict:
+        params = {
+            "address": address,
+            "amount": amount,
+            "password": password,
+            "fee_level": fee_level,
+        }
+        if otp:
+            params["otp"] = otp
+
+        return self._api_call(
+            api_method="wallet-send/XMR", http_method="POST", query_values=params
+        )

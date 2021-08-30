@@ -7,6 +7,7 @@ setup(
     version="0.1.0",
     packages=["agoradesk_py"],
     install_requires=[
+        "arrow",
         "httpx",
     ],
     author="marvin8",

@@ -50,7 +50,7 @@ if __name__ == "__main__":
         print(f"{notify['created_at']} {notify['msg']}  ({notify['id']})")
 
     api_response = api.notifications_mark_as_read(
-        "7ca4d852-b2ee-4ca9-a4d8-52b2eeaca913"
+        notification_id="7ca4d852-b2ee-4ca9-a4d8-52b2eeaca913"
     )
     print()
     print("Notifications/mark_as_read:")

@@ -14,7 +14,7 @@ def test_basic_response(unit_test, result, method_name):
     unit_test.assertTrue(isinstance(result["response"], dict), "result is not a dict")
 
 
-class AgoraDeskAuthTests(unittest.TestCase):
+class AuthTests(unittest.TestCase):
     def setUp(self) -> None:
         self.api = AgoraDesk(api_key=api_key, debug=True)
 
@@ -30,7 +30,7 @@ class AgoraDeskAuthTests(unittest.TestCase):
         self.assertEqual(actual["message"], "API ERROR", "None key")
 
 
-class AgoraDeskAccountTests(unittest.TestCase):
+class AccountTests(unittest.TestCase):
     def setUp(self) -> None:
         self.api = AgoraDesk(api_key=api_key, debug=True)
 
@@ -88,6 +88,55 @@ class AgoraDeskAccountTests(unittest.TestCase):
     def test_recent_messages(self) -> None:
         actual = self.api.recent_messages()
         test_basic_response(self, actual, "recent_messages")
+
+
+class WalletTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.api = AgoraDesk(api_key=api_key, debug=True)
+
+    def test_wallet(self) -> None:
+        actual = self.api.wallet()
+        test_basic_response(self, actual, "wallet")
+
+    def test_wallet_balance(self) -> None:
+        actual = self.api.wallet_balance()
+        test_basic_response(self, actual, "wallet-balance")
+
+    def test_wallet_xrm(self) -> None:
+        actual = self.api.wallet_xmr()
+        test_basic_response(self, actual, "wallet/XMR")
+
+    def test_wallet_balance_xmr(self) -> None:
+        actual = self.api.wallet_balance_xmr()
+        test_basic_response(self, actual, "wallet-balance/XMR")
+
+    def test_wallet_addr(self) -> None:
+        actual = self.api.wallet_addr()
+        test_basic_response(self, actual, "wallet-addr")
+
+    def test_wallet_addr_xmr(self) -> None:
+        actual = self.api.wallet_addr_xmr()
+        test_basic_response(self, actual, "wallet-addr/XMR")
+
+    def test_fees(self) -> None:
+        actual = self.api.fees()
+        test_basic_response(self, actual, "fees")
+
+    def test_fees_xmr(self) -> None:
+        actual = self.api.fees_xmr()
+        test_basic_response(self, actual, "fees/XMR")
+
+    def test_wallet_send(self):
+        # Todo: workout how to best test this method
+        # actual = self.api.wallet_send(address='i6827278356r8ygrf78t',amount=0.1,password='password',fee_level='LOW')
+        # test_basic_response(self, actual, "wallet-send")
+        pass
+
+    def test_wallet_send_xmr(self):
+        # Todo: workout how to best test this method
+        # actual = self.api.wallet_send_xmr(address='i6827278356r8ygrf78t',amount=0.1,password='password',fee_level='LOW')
+        # test_basic_response(self, actual, "wallet-send/XMR")
+        pass
 
 
 if __name__ == "__main__":
