@@ -40,27 +40,27 @@ class AccountTests(unittest.TestCase):
 
     def test_dashboard(self):
         actual = self.api.dashboard()
-        test_basic_response(self, actual, "dasboard")
+        test_basic_response(self, actual, "dashboard")
 
     def test_dashboard_buyer(self):
         actual = self.api.dashboard_buyer()
-        test_basic_response(self, actual, "dasboard_buyer")
+        test_basic_response(self, actual, "dashboard/buyer")
 
     def test_dashboard_seller(self):
         actual = self.api.dashboard_seller()
-        test_basic_response(self, actual, "dasboard_seller")
+        test_basic_response(self, actual, "dashboard/seller")
 
     def test_dashboard_canceled(self):
         actual = self.api.dashboard_canceled()
-        test_basic_response(self, actual, "dasboard_canceled")
+        test_basic_response(self, actual, "dashboard/canceled")
 
     def test_dashboard_closed(self):
         actual = self.api.dashboard_closed()
-        test_basic_response(self, actual, "dasboard_closed")
+        test_basic_response(self, actual, "dashboard/closed")
 
     def test_dashboard_released(self):
         actual = self.api.dashboard_released()
-        test_basic_response(self, actual, "dasboard_released")
+        test_basic_response(self, actual, "dashboard/released")
 
     def test_wallet_xmr(self):
         actual = self.api.wallet_xmr()
@@ -88,6 +88,19 @@ class AccountTests(unittest.TestCase):
     def test_recent_messages(self) -> None:
         actual = self.api.recent_messages()
         test_basic_response(self, actual, "recent_messages")
+
+
+class StatisticsTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.api = AgoraDesk(api_key=api_key, debug=True)
+
+    def test_moneroaverage_ticker_all_currencies(self) -> None:
+        actual = self.api.moneroaverage()
+        test_basic_response(self, actual, "moneroaverage/ticker-all-currencies")
+
+    def test_moneroaverage_aud(self) -> None:
+        actual = self.api.moneroaverage(currency="AUD")
+        test_basic_response(self, actual, "moneroaverage/AUD")
 
 
 class WalletTest(unittest.TestCase):
@@ -128,13 +141,23 @@ class WalletTest(unittest.TestCase):
 
     def test_wallet_send(self):
         # Todo: workout how to best test this method
-        # actual = self.api.wallet_send(address='i6827278356r8ygrf78t',amount=0.1,password='password',fee_level='LOW')
+        # actual = self.api.wallet_send(
+        #     address="i6827278356r8ygrf78t",
+        #     amount=0.1,
+        #     password="password",
+        #     fee_level="LOW",
+        # )
         # test_basic_response(self, actual, "wallet-send")
         pass
 
     def test_wallet_send_xmr(self):
         # Todo: workout how to best test this method
-        # actual = self.api.wallet_send_xmr(address='i6827278356r8ygrf78t',amount=0.1,password='password',fee_level='LOW')
+        # actual = self.api.wallet_send_xmr(
+        #     address="i6827278356r8ygrf78t",
+        #     amount=0.1,
+        #     password="password",
+        #     fee_level="LOW",
+        # )
         # test_basic_response(self, actual, "wallet-send/XMR")
         pass
 

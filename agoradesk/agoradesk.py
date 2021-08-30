@@ -142,6 +142,12 @@ class AgoraDesk:
     def recent_messages(self) -> dict:
         return self._api_call(api_method="recent_messages")
 
+    # Statistics related API Methods
+    # ==============================
+
+    def moneroaverage(self, currency: Optional[str] = "ticker-all-currencies") -> dict:
+        return self._api_call(api_method=f"moneroaverage/{currency}")
+
     # Wallet related API Methods
     # ===========================
 
