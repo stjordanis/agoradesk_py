@@ -92,6 +92,82 @@ class AccountTests(unittest.TestCase):
         test_successful_response(self, actual, "recent_messages")
 
 
+class AdvertisementTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.api = AgoraDesk(api_key=api_key, debug=True)
+
+    def test_payment_methods(self) -> None:
+        actual = self.api.payment_methods()
+        test_successful_response(self, actual, "payment_methods")
+
+
+class AdSearchTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self.api = AgoraDesk(api_key=api_key, debug=True)
+
+    def test_buy_monero_online_aud_page1(self) -> None:
+        actual = self.api.buy_monero_online(currency_code="AUD", page=1)
+        test_successful_response(self, actual, "buy-monero-online/{currencycode}")
+
+    def test_buy_monero_online_aud_au(self) -> None:
+        actual = self.api.buy_monero_online(currency_code="AUD", country_code="AU")
+        test_successful_response(
+            self,
+            actual,
+            "buy-monero-online/{currencycode}/{countrycode}",
+        )
+
+    def test_buy_monero_online_aud_osko_333_33(self) -> None:
+        actual = self.api.buy_monero_online(
+            currency_code="AUD",
+            payment_method="osko-payid",
+            amount=333.33,
+        )
+        test_successful_response(
+            self,
+            actual,
+            "buy-monero-online/{currencycode}/{payment_method}",
+        )
+
+    def test_buy_bitcoins_online_aud_333_page1(self) -> None:
+        actual = self.api.buy_bitcoins_online(currency_code="AUD", amount=333, page=1)
+        test_successful_response(self, actual, "buy-monero-online/{currencycode}")
+
+    def test_sell_monero_online_aud_au_paypal(self) -> None:
+        actual = self.api.sell_monero_online(
+            currency_code="AUD", country_code="AU", payment_method="osko-payid"
+        )
+        test_successful_response(
+            self,
+            actual,
+            "sell-monero-online/{currencycode}/{countrycode}/{payment_method}",
+        )
+
+    def test_sell_bitcoins_online_aud(self) -> None:
+        actual = self.api.sell_bitcoins_online(currency_code="AUD")
+        test_successful_response(self, actual, "sell-bitcoins-online/{currencycode}")
+
+    def test_buy_monero_with_cash(self) -> None:
+        actual = self.api.buy_monero_with_cash(
+            currency_code="AUD",
+            country_code="AU",
+            lat="-26.75823",
+            lon="152.85062",
+        )
+        test_successful_response(self, actual, "buy-monero-with_cash/...")
+
+    def test_sell_bitcoins_with_cash_333_page1(self) -> None:
+        actual = self.api.buy_bitcoins_with_cash(
+            currency_code="AUD",
+            country_code="AU",
+            lat="-26.75823",
+            lon="152.85062",
+            amount=333,
+            page=1,
+        )
+        test_successful_response(self, actual, "sell-bitcoins-with-cash/...")
+
+
 class StatisticsTest(unittest.TestCase):
     def setUp(self) -> None:
         self.api = AgoraDesk(api_key=api_key, debug=True)

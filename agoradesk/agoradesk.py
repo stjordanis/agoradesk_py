@@ -142,6 +142,219 @@ class AgoraDesk:
     def recent_messages(self) -> dict:
         return self._api_call(api_method="recent_messages")
 
+    # Advertisement related API Methods
+    # ================================
+
+    def payment_methods(self) -> dict:
+        return self._api_call(api_method="payment_methods")
+
+    # Public ad search related API Methods
+    # ====================================
+
+    def _generic_online(
+        self,
+        direction: str,
+        main_currency: str,
+        exchange_currency: str,
+        country_code: Optional[str] = None,
+        payment_method: Optional[str] = None,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+
+        add_to_api_method = ""
+        if country_code:
+            add_to_api_method = f"/{country_code}"
+        if payment_method:
+            add_to_api_method += f"/{payment_method}"
+
+        params = self._generic_search_parameters(amount, page)
+
+        return self._api_call(
+            api_method=f"{direction}-{main_currency}-online/{exchange_currency}{add_to_api_method}",
+            query_values=params,
+        )
+
+    def _generic_search_parameters(self, amount, page):
+        params = None
+        if amount and not page:
+            params = {"amount": f"{amount}"}
+        elif amount and page:
+            params = {"amount": f"{amount}", "page": f"{page}"}
+        elif not amount and page:
+            params = {"page": f"{page}"}
+        return params
+
+    def buy_monero_online(
+        self,
+        currency_code: str,
+        country_code: Optional[str] = None,
+        payment_method: Optional[str] = None,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        return self._generic_online(
+            direction="buy",
+            main_currency="monero",
+            exchange_currency=currency_code,
+            country_code=country_code,
+            payment_method=payment_method,
+            amount=amount,
+            page=page,
+        )
+
+    def buy_bitcoins_online(
+        self,
+        currency_code: str,
+        country_code: Optional[str] = None,
+        payment_method: Optional[str] = None,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        return self._generic_online(
+            direction="buy",
+            main_currency="bitcoins",
+            exchange_currency=currency_code,
+            country_code=country_code,
+            payment_method=payment_method,
+            amount=amount,
+            page=page,
+        )
+
+    def sell_monero_online(
+        self,
+        currency_code: str,
+        country_code: Optional[str] = None,
+        payment_method: Optional[str] = None,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        return self._generic_online(
+            direction="sell",
+            main_currency="monero",
+            exchange_currency=currency_code,
+            country_code=country_code,
+            payment_method=payment_method,
+            amount=amount,
+            page=page,
+        )
+
+    def sell_bitcoins_online(
+        self,
+        currency_code: str,
+        country_code: Optional[str] = None,
+        payment_method: Optional[str] = None,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        return self._generic_online(
+            direction="sell",
+            main_currency="bitcoins",
+            exchange_currency=currency_code,
+            country_code=country_code,
+            payment_method=payment_method,
+            amount=amount,
+            page=page,
+        )
+
+    def _generic_cash(
+        self,
+        direction: str,
+        main_currency: str,
+        exchange_currency: str,
+        country_code: str,
+        lat: str,
+        lon: str,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        params = self._generic_search_parameters(amount, page)
+
+        return self._api_call(
+            api_method=f"{direction}-{main_currency}-with-cash/{exchange_currency}/{country_code}/{lat}/{lon}",
+            query_values=params,
+        )
+
+    def buy_monero_with_cash(
+        self,
+        currency_code: str,
+        country_code: str,
+        lat: str,
+        lon: str,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        return self._generic_cash(
+            direction="buy",
+            main_currency="monero",
+            exchange_currency=currency_code,
+            country_code=country_code,
+            lat=lat,
+            lon=lon,
+            amount=amount,
+            page=page,
+        )
+
+    def buy_bitcoins_with_cash(
+        self,
+        currency_code: str,
+        country_code: str,
+        lat: str,
+        lon: str,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        return self._generic_cash(
+            direction="buy",
+            main_currency="bitcoins",
+            exchange_currency=currency_code,
+            country_code=country_code,
+            lat=lat,
+            lon=lon,
+            amount=amount,
+            page=page,
+        )
+
+    def sell_monero_with_cash(
+        self,
+        currency_code: str,
+        country_code: str,
+        lat: str,
+        lon: str,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        return self._generic_cash(
+            direction="sell",
+            main_currency="monero",
+            exchange_currency=currency_code,
+            country_code=country_code,
+            lat=lat,
+            lon=lon,
+            amount=amount,
+            page=page,
+        )
+
+    def sell_bitcoins_with_cash(
+        self,
+        currency_code: str,
+        country_code: str,
+        lat: str,
+        lon: str,
+        amount: Optional[float] = None,
+        page: Optional[int] = None,
+    ) -> dict:
+        return self._generic_cash(
+            direction="sell",
+            main_currency="bitcoins",
+            exchange_currency=currency_code,
+            country_code=country_code,
+            lat=lat,
+            lon=lon,
+            amount=amount,
+            page=page,
+        )
+
     # Statistics related API Methods
     # ==============================
 
