@@ -69,13 +69,21 @@ class AgoraDesk:
 
         try:
             response = None
-            if http_method == "GET":
-                response = httpx.get(
-                    url=api_call_url, headers=headers, params=query_values
-                )
+            if http_method == "POST":
+                if query_values:
+                    response = httpx.post(
+                        url=api_call_url,
+                        headers=headers,
+                        content=json.dumps(query_values),
+                    )
+                else:
+                    response = httpx.post(
+                        url=api_call_url,
+                        headers=headers,
+                    )
 
-            elif http_method == "POST":
-                response = httpx.post(
+            else:
+                response = httpx.get(
                     url=api_call_url, headers=headers, params=query_values
                 )
 
@@ -145,8 +153,220 @@ class AgoraDesk:
     # Advertisement related API Methods
     # ================================
 
-    def payment_methods(self) -> dict:
-        return self._api_call(api_method="payment_methods")
+    def ad_create(
+        self,
+        country_code: str,
+        currency: str,
+        trade_type: str,
+        asset: str,
+        price_equation: str,
+        track_max_amount: bool,
+        require_trusted_by_advertiser: bool,
+        verified_email_required: bool,
+        online_provider: Optional[str] = None,
+        msg: Optional[str] = None,
+        min_amount: Optional[float] = None,
+        max_amount: Optional[float] = None,
+        limit_to_fiat_amounts: Optional[str] = None,
+        payment_method_details: Optional[str] = None,
+        first_time_limit_asset: Optional[float] = None,
+        require_feedback_score: Optional[int] = None,
+        account_info: Optional[str] = None,
+        payment_window_minutes: Optional[int] = None,
+        floating: Optional[bool] = None,
+        lat: Optional[float] = None,
+        lon: Optional[float] = None,
+    ) -> dict:
+        params = {
+            "countrycode": country_code,
+            "currency": currency,
+            "trade_type": trade_type,
+            "asset": asset,
+            "price_equation": price_equation,
+            "track_max_amount": 1 if track_max_amount else 0,
+            "require_trusted_by_advertiser": 1 if require_trusted_by_advertiser else 0,
+            "verified_email_required": 1 if verified_email_required else 0,
+        }
+        if online_provider:
+            params["online_provider"] = online_provider
+        if msg:
+            params["msg"] = msg
+        if min_amount:
+            params["min_amount"] = min_amount
+        if max_amount:
+            params["max_amount"] = max_amount
+        if limit_to_fiat_amounts:
+            params["limit_to_fiat_amounts"] = limit_to_fiat_amounts
+        if payment_method_details:
+            params["payment_method_details"] = payment_method_details
+        if first_time_limit_asset:
+            params["first_time_limit_asset"] = first_time_limit_asset
+        if require_feedback_score:
+            params["require_feedback_score"] = require_feedback_score
+        if account_info:
+            params["account_info"] = account_info
+        if payment_window_minutes:
+            params["payment_window_minutes"] = payment_window_minutes
+        if floating:
+            params["floating"] = 1 if floating else 0
+        if lat:
+            params["lat"] = lat
+        if lon:
+            params["lon"] = lon
+
+        return self._api_call(
+            api_method="ad-create",
+            http_method="POST",
+            query_values=params,
+        )
+
+    def ad(
+        self,
+        ad_id: str,
+        country_code: Optional[str] = None,
+        currency: Optional[str] = None,
+        trade_type: Optional[str] = None,
+        asset: Optional[str] = None,
+        price_equation: Optional[str] = None,
+        track_max_amount: Optional[bool] = None,
+        require_trusted_by_advertiser: Optional[bool] = None,
+        verified_email_required: Optional[bool] = None,
+        online_provider: Optional[str] = None,
+        msg: Optional[str] = None,
+        min_amount: Optional[float] = None,
+        max_amount: Optional[float] = None,
+        limit_to_fiat_amounts: Optional[str] = None,
+        payment_method_details: Optional[str] = None,
+        first_time_limit_asset: Optional[float] = None,
+        require_feedback_score: Optional[int] = None,
+        account_info: Optional[str] = None,
+        payment_window_minutes: Optional[int] = None,
+        floating: Optional[bool] = None,
+        lat: Optional[float] = None,
+        lon: Optional[float] = None,
+    ) -> dict:
+        params = {}
+        if country_code:
+            params["countrycode"] = country_code
+        if currency:
+            params["currency"] = currency
+        if trade_type:
+            params["trade_type"] = trade_type
+        if asset:
+            params["asset"] = asset
+        if price_equation:
+            params["price_equation"] = price_equation
+        if track_max_amount:
+            params["track_max_amount"] = 1 if track_max_amount else 0
+        if require_trusted_by_advertiser:
+            params["require_trusted_by_advertiser"] = (
+                1 if require_trusted_by_advertiser else 0
+            )
+        if verified_email_required:
+            params["verified_email_required"] = 1 if verified_email_required else 0
+        if online_provider:
+            params["online_provider"] = online_provider
+        if msg:
+            params["msg"] = msg
+        if min_amount:
+            params["min_amount"] = min_amount
+        if max_amount:
+            params["max_amount"] = max_amount
+        if limit_to_fiat_amounts:
+            params["limit_to_fiat_amounts"] = limit_to_fiat_amounts
+        if payment_method_details:
+            params["payment_method_details"] = payment_method_details
+        if first_time_limit_asset:
+            params["first_time_limit_asset"] = first_time_limit_asset
+        if require_feedback_score:
+            params["require_feedback_score"] = require_feedback_score
+        if account_info:
+            params["account_info"] = account_info
+        if payment_window_minutes:
+            params["payment_window_minutes"] = payment_window_minutes
+        if floating:
+            params["floating"] = 1 if floating else 0
+        if lat:
+            params["lat"] = lat
+        if lon:
+            params["lon"] = lon
+
+        return self._api_call(
+            api_method=f"ad/{ad_id}",
+            http_method="POST",
+            query_values=params,
+        )
+
+    def ad_equation(self, ad_id: str, price_equation: str) -> dict:
+        return self._api_call(
+            api_method=f"ad-equation/{ad_id}",
+            http_method="POST",
+            query_values={"price_equation": price_equation},
+        )
+
+    def ad_delete(self, ad_id: str) -> dict:
+        return self._api_call(api_method=f"ad-delete/{ad_id}", http_method="POST")
+
+    def ads(
+        self,
+        country_code: Optional[str] = None,
+        currency: Optional[str] = None,
+        trade_type: Optional[str] = None,
+        visible: Optional[bool] = None,
+        asset: Optional[str] = None,
+        payment_method_code: Optional[str] = None,
+    ) -> dict:
+
+        params = {}
+        if country_code:
+            params["countrycode"] = country_code
+        if currency:
+            params["currency"] = currency
+        if trade_type:
+            params["trade_type"] = trade_type
+        if visible is not None and visible:
+            params["visible"] = 1
+        elif visible is not None and not visible:
+            params["visible"] = 0
+        if asset:
+            params["asset"] = asset
+        if payment_method_code:
+            params["payment_method_code"] = payment_method_code
+
+        if len(params) == 0:
+            params = None
+
+        return self._api_call(api_method="ads", query_values=params)
+
+    def ad_get(self, ad_ids: list) -> dict:
+        api_method = "ad-get"
+        params = None
+        ids = str(ad_ids)[1:-1].replace(" ", "").replace("'", "")
+
+        if len(ad_ids) == 1:
+            api_method += f"/{ids}"
+        else:
+            params = {"ads": ids}
+        return self._api_call(api_method=api_method, query_values=params)
+
+    def payment_methods(self, country_code: Optional[str] = None) -> dict:
+        api_method = "payment_methods"
+        if country_code:
+            api_method += f"/{country_code}"
+        return self._api_call(api_method=api_method)
+
+    def country_codes(self) -> dict:
+        return self._api_call(api_method="countrycodes")
+
+    def currencies(self) -> dict:
+        return self._api_call(api_method="currencies")
+
+    def equation(self, price_equation: str, currency: str) -> dict:
+        return self._api_call(
+            api_method=f"equation",
+            http_method="POST",
+            query_values={"price_equation": price_equation, "currency": currency},
+        )
 
     # Public ad search related API Methods
     # ====================================

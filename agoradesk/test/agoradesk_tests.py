@@ -96,9 +96,141 @@ class AdvertisementTest(unittest.TestCase):
     def setUp(self) -> None:
         self.api = AgoraDesk(api_key=api_key, debug=True)
 
+    def test_ad_create_show__update_and_delete(self) -> None:
+        actual = self.api.ad_create(
+            country_code="AU",
+            currency="LTC",
+            trade_type="ONLINE_BUY",
+            asset="XMR",
+            price_equation="coingeckoxmrltc*0.1",
+            track_max_amount=False,
+            require_trusted_by_advertiser=True,
+            verified_email_required=True,
+            online_provider="CRYPTOCURRENCY",
+        )
+        test_successful_response(self, actual, "add-create-mininmum")
+
+        ad_id = actual["response"]["data"]["ad_id"]
+
+        actual_single = self.api.ad_get(ad_ids=[ad_id])
+        test_successful_response(self, actual_single, "ad_get/id")
+
+        actual_complete = self.api.ad_create(
+            country_code="AU",
+            currency="LTC",
+            trade_type="ONLINE_BUY",
+            asset="XMR",
+            price_equation="coingeckoxmrltc*0.1",
+            track_max_amount=False,
+            require_trusted_by_advertiser=True,
+            verified_email_required=True,
+            online_provider="CRYPTOCURRENCY",
+            msg="Test Only, do not trade with this",
+            min_amount=1.2,
+            max_amount=5.72,
+            limit_to_fiat_amounts="2,5",
+            payment_method_details="monero address is 89xxxx",
+            payment_window_minutes=15,
+        )
+        test_successful_response(self, actual_complete, "ad-create-all")
+        ad_id2 = actual_complete["response"]["data"]["ad_id"]
+
+        actual_local_buy = self.api.ad_create(
+            country_code="AU",
+            currency="AUD",
+            trade_type="LOCAL_BUY",
+            asset="XMR",
+            price_equation="usdaud*coingeckoxmrusd*0.1",
+            track_max_amount=False,
+            require_trusted_by_advertiser=True,
+            verified_email_required=True,
+            msg="Test Only, do not trade with this",
+            min_amount=1.2,
+            max_amount=5.72,
+            limit_to_fiat_amounts="2,5",
+            payment_method_details="monero address is 89xxxx",
+            payment_window_minutes=15,
+            floating=True,
+            lat=51.509865,
+            lon=-0.118092,
+        )
+        test_successful_response(self, actual_local_buy, "ad-create-local_buy")
+        ad_id3 = actual_local_buy["response"]["data"]["ad_id"]
+
+        actual_price_equation = self.api.ad_equation(
+            ad_id=ad_id3,
+            price_equation="usdaud*coingeckoxmrusd*0.05",
+        )
+        test_successful_response(self, actual_price_equation, "ad-equation")
+
+        actual_update = self.api.ad(
+            ad_id=ad_id3,
+            country_code="AU",
+            currency="AUD",
+            trade_type="LOCAL_BUY",
+            asset="XMR",
+            price_equation="usdaud*coingeckoxmrusd*0.1",
+            track_max_amount=False,
+            require_trusted_by_advertiser=True,
+            verified_email_required=True,
+            msg="Test Only, do not trade with this... I really mean this",
+            min_amount=1.0,
+            max_amount=6,
+            payment_method_details="monero address is 89xxxx",
+            payment_window_minutes=15,
+            floating=True,
+            lat=51.509865,
+            lon=-0.118092,
+        )
+        test_successful_response(self, actual_update, "ad/{ad_id}")
+
+        ad_ids = [ad_id, ad_id2, ad_id3]
+        actual_multiple = self.api.ad_get(ad_ids=ad_ids)
+        test_successful_response(self, actual_multiple, "ag-get?ads=...")
+
+        actual_delete = self.api.ad_delete(ad_id)
+        test_successful_response(self, actual_delete, "ad-delete")
+        actual_delete2 = self.api.ad_delete(ad_id2)
+        test_successful_response(self, actual_delete2, "ad-delete2")
+        actual_delete3 = self.api.ad_delete(ad_id3)
+        test_successful_response(self, actual_delete3, "ad-delete3")
+
+    def test_ads(self) -> None:
+        actual = self.api.ads()
+        test_successful_response(self, actual, "ads")
+
+    def test_ads_all_params(self) -> None:
+        actual = self.api.ads(
+            country_code="AU",
+            currency="AUD",
+            trade_type="ONLINE_SELL",
+            visible=True,
+            asset="XMR",
+            payment_method_code="osko-payid",
+        )
+        test_successful_response(self, actual, "ads")
+
     def test_payment_methods(self) -> None:
         actual = self.api.payment_methods()
         test_successful_response(self, actual, "payment_methods")
+
+    def test_payment_methods_country(self) -> None:
+        actual = self.api.payment_methods(country_code="AU")
+        test_successful_response(self, actual, "payment_methods/AU")
+
+    def test_country_codes(self) -> None:
+        actual = self.api.country_codes()
+        test_successful_response(self, actual, "countrycodes")
+
+    def test_currencies(self) -> None:
+        actual = self.api.currencies()
+        test_successful_response(self, actual, "currencies")
+
+    def test_equation(self) -> None:
+        actual = self.api.equation(
+            price_equation="usdaud*coingeckoxmrusd*0.1", currency="AUD"
+        )
+        test_successful_response(self, actual, "equation")
 
 
 class AdSearchTest(unittest.TestCase):
