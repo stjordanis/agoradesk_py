@@ -1,6 +1,6 @@
 import os
 
-from agoradesk import AgoraDesk
+from src.agoradesk_py import AgoraDesk
 
 if __name__ == "__main__":
 
