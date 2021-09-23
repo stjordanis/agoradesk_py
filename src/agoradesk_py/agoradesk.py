@@ -155,6 +155,52 @@ class AgoraDesk:
     def recent_messages(self) -> Dict[str, Any]:
         return self._api_call(api_method="recent_messages")
 
+    # Trade related API Methods
+    # ===========================
+
+    #     Todo:
+    #     post/feedback/{username} • Give feedback to a user
+    #     post/trade/contact_release/{trade_id} • Release trade escrow
+    #     post/contact_fund/{trade_id} • Fund a trade
+    #     post/contact_dispute/{trade_id} • Start a trade dispute
+    #     post/contact_mark_as_paid/{trade_id} • Mark a trade as paid\
+
+    #     post/contact_cancel/{trade_id} • Cancel the trade
+    def contact_cancel(
+        self,
+        trade_id: str,
+    ) -> Dict[str, Any]:
+        return self._api_call(
+            api_method=f"contact_cancel/{trade_id}",
+            http_method="POST",
+        )
+
+    #     Todo:
+    #     post/contact_escrow/{trade_id} • Enable escrow
+    #     get/contact_messages/{trade_id} • Get trade messages
+
+    #     post/contact_create/{ad_id} • Start a trade
+    def contact_create(
+        self,
+        ad_id: str,
+        amount: float,
+        msg: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        payload = {"amount": amount}
+        if msg:
+            payload["msg"] = msg
+        return self._api_call(
+            api_method=f"contact_create/{ad_id}",
+            http_method="POST",
+            query_values=payload,
+        )
+
+    #     Todo:
+    #     get/contact_info/{trade_id} • Get a trade by trade ID
+    #     get/contact_info?contacts={trade_id1},{trade_id2}... • Get multiple trade by their trade IDs
+    #     post/contact_message_post/{trade_id} • Send a chat message/attachment
+    #     get/contact_message_attachment/{trade_id}/{attachment_id} • Get a trade chat attachment
+
     # Advertisement related API Methods
     # ================================
 

@@ -3,8 +3,8 @@ __copyright__ = "(C) 2021 https://codeberg.org/MarvinsCryptoTools/agoradesk_py"
 __version__ = "0.1.0"
 
 
-def test_ad_create_show_and_delete(default_api) -> None:
-    actual = default_api.ad_create(
+def test_ad_create_show_and_delete(maker_api) -> None:
+    actual = maker_api.ad_create(
         country_code="AU",
         currency="LTC",
         trade_type="ONLINE_BUY",
@@ -18,7 +18,7 @@ def test_ad_create_show_and_delete(default_api) -> None:
     assert actual["success"] is True
     ad_id = actual["response"]["data"]["ad_id"]
 
-    actual_complete = default_api.ad_create(
+    actual_complete = maker_api.ad_create(
         country_code="AU",
         currency="LTC",
         trade_type="ONLINE_BUY",
@@ -37,33 +37,33 @@ def test_ad_create_show_and_delete(default_api) -> None:
     assert actual_complete["success"] is True
     ad_id2 = actual_complete["response"]["data"]["ad_id"]
 
-    actual_single = default_api.ad_get(ad_ids=[ad_id2])
+    actual_single = maker_api.ad_get(ad_ids=[ad_id2])
     assert actual_single["success"] is True
 
     ad_ids = [ad_id, ad_id2]
-    actual_multiple = default_api.ad_get(ad_ids=ad_ids)
+    actual_multiple = maker_api.ad_get(ad_ids=ad_ids)
     assert actual_multiple["success"] is True
 
-    actual_delete = default_api.ad_delete(ad_id)
+    actual_delete = maker_api.ad_delete(ad_id)
     assert actual_delete["success"] is True
-    actual_delete2 = default_api.ad_delete(ad_id2)
+    actual_delete2 = maker_api.ad_delete(ad_id2)
     assert actual_delete2["success"] is True
 
 
-def test_ad_equation(default_api, local_cash_sale):
+def test_ad_equation(maker_api, local_cash_sale):
     assert local_cash_sale is not None
 
-    actual = default_api.ad_equation(
+    actual = maker_api.ad_equation(
         ad_id=local_cash_sale,
         price_equation="usdaud*coingeckoxmrusd*0.05",
     )
     assert actual["success"] is True
 
 
-def test_ad_update(default_api, local_cash_sale):
+def test_ad_update(maker_api, local_cash_sale):
     assert local_cash_sale is not None
 
-    actual = default_api.ad(
+    actual = maker_api.ad(
         ad_id=local_cash_sale,
         country_code="AU",
         currency="AUD",
@@ -83,13 +83,13 @@ def test_ad_update(default_api, local_cash_sale):
     assert actual["success"] is True
 
 
-def test_ads(default_api) -> None:
-    actual = default_api.ads()
+def test_ads(maker_api) -> None:
+    actual = maker_api.ads()
     assert actual["success"] is True
 
 
-def test_ads_all_params(default_api) -> None:
-    actual = default_api.ads(
+def test_ads_all_params(maker_api) -> None:
+    actual = maker_api.ads(
         country_code="AU",
         currency="AUD",
         trade_type="ONLINE_SELL",
@@ -100,28 +100,28 @@ def test_ads_all_params(default_api) -> None:
     assert actual["success"] is True
 
 
-def test_payment_methods(default_api) -> None:
-    actual = default_api.payment_methods()
+def test_payment_methods(maker_api) -> None:
+    actual = maker_api.payment_methods()
     assert actual["success"] is True
 
 
-def test_payment_methods_country(default_api) -> None:
-    actual = default_api.payment_methods(country_code="AU")
+def test_payment_methods_country(maker_api) -> None:
+    actual = maker_api.payment_methods(country_code="AU")
     assert actual["success"] is True
 
 
-def test_country_codes(default_api) -> None:
-    actual = default_api.country_codes()
+def test_country_codes(maker_api) -> None:
+    actual = maker_api.country_codes()
     assert actual["success"] is True
 
 
-def test_currencies(default_api) -> None:
-    actual = default_api.currencies()
+def test_currencies(maker_api) -> None:
+    actual = maker_api.currencies()
     assert actual["success"] is True
 
 
-def test_equation(default_api) -> None:
-    actual = default_api.equation(
+def test_equation(maker_api) -> None:
+    actual = maker_api.equation(
         price_equation="usdaud*coingeckoxmrusd*0.1", currency="AUD"
     )
     assert actual["success"] is True

@@ -3,49 +3,49 @@ __copyright__ = "(C) 2021 https://codeberg.org/MarvinsCryptoTools/agoradesk_py"
 __version__ = "0.1.0"
 
 
-def test_wallet(default_api) -> None:
-    result = default_api.wallet()
+def test_wallet(maker_api) -> None:
+    result = maker_api.wallet()
     assert result["success"] is True
 
 
-def test_wallet_balance(default_api) -> None:
-    result = default_api.wallet_balance()
+def test_wallet_balance(maker_api) -> None:
+    result = maker_api.wallet_balance()
     assert result["success"] is True
 
 
-def test_wallet_xrm(default_api) -> None:
-    result = default_api.wallet_xmr()
+def test_wallet_xrm(maker_api) -> None:
+    result = maker_api.wallet_xmr()
     assert result["success"] is True
 
 
-def test_wallet_balance_xmr(default_api) -> None:
-    result = default_api.wallet_balance_xmr()
+def test_wallet_balance_xmr(maker_api) -> None:
+    result = maker_api.wallet_balance_xmr()
     assert result["success"] is True
 
 
-def test_wallet_addr(default_api) -> None:
-    result = default_api.wallet_addr()
+def test_wallet_addr(maker_api) -> None:
+    result = maker_api.wallet_addr()
     assert result["success"] is True
 
 
-def test_wallet_addr_xmr(default_api) -> None:
-    result = default_api.wallet_addr_xmr()
+def test_wallet_addr_xmr(maker_api) -> None:
+    result = maker_api.wallet_addr_xmr()
     assert result["success"] is True
 
 
-def test_fees(default_api) -> None:
-    result = default_api.fees()
+def test_fees(maker_api) -> None:
+    result = maker_api.fees()
     assert result["success"] is True
 
 
-def test_fees_xmr(default_api) -> None:
-    result = default_api.fees_xmr()
+def test_fees_xmr(maker_api) -> None:
+    result = maker_api.fees_xmr()
     assert result["success"] is True
 
 
-def test_wallet_send(default_api) -> None:
+def test_wallet_send(maker_api) -> None:
     # Todo: workout how to best test this method
-    # result = default_api.wallet_send(
+    # result = maker_api.wallet_send(
     #     address="i6827278356r8ygrf78t",
     #     amount=0.1,
     #     password="password",
@@ -55,9 +55,9 @@ def test_wallet_send(default_api) -> None:
     pass
 
 
-def test_wallet_send_xmr(default_api) -> None:
+def test_wallet_send_xmr(maker_api) -> None:
     # Todo: workout how to best test this method
-    # result = default_api.wallet_send_xmr(
+    # result = maker_api.wallet_send_xmr(
     #     address="i6827278356r8ygrf78t",
     #     amount=0.1,
     #     password="password",

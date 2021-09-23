@@ -7,8 +7,8 @@ __version__ = "0.1.0"
 
 # Test Authentication
 # ======================================
-def test_ok_api_key(default_api) -> None:
-    actual = default_api.myself()
+def test_ok_api_key(maker_api) -> None:
+    actual = maker_api.myself()
     assert actual["success"] is True
     assert "response" in actual
     assert isinstance(actual["response"], dict) is True
