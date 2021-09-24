@@ -5,6 +5,7 @@ import json
 import logging
 from typing import Optional, Dict, Any, List
 
+import arrow
 import httpx
 
 __author__ = "marvin8"
@@ -177,7 +178,20 @@ class AgoraDesk:
 
     #     Todo:
     #     post/contact_escrow/{trade_id} • Enable escrow
+
     #     get/contact_messages/{trade_id} • Get trade messages
+    def contact_messages(
+        self, trade_id: str, after: Optional[arrow.Arrow] = None
+    ) -> Dict[str, Any]:
+        if after:
+            reply = self._api_call(
+                api_method=f"contact_messages/{trade_id}",
+                query_values={"after": after.to("UTC").isoformat()},
+            )
+        else:
+            reply = self._api_call(api_method=f"contact_messages/{trade_id}")
+
+        return reply
 
     #     post/contact_create/{ad_id} • Start a trade
     def contact_create(
@@ -195,10 +209,26 @@ class AgoraDesk:
             query_values=payload,
         )
 
-    #     Todo:
     #     get/contact_info/{trade_id} • Get a trade by trade ID
+    def contact_info(self, trade_id: str) -> Dict[str, Any]:
+        return self._api_call(api_method=f"contact_info/{trade_id}")
+
+    #     Todo:
     #     get/contact_info?contacts={trade_id1},{trade_id2}... • Get multiple trade by their trade IDs
+
+    #     Todo: Add image upload functionality
     #     post/contact_message_post/{trade_id} • Send a chat message/attachment
+    def contact_message_post(
+        self, trade_id: str, msg: Optional[str] = None
+    ) -> Dict[str, Any]:
+        payload = {"msg": msg}
+        return self._api_call(
+            api_method=f"contact_message_post/{trade_id}",
+            http_method="POST",
+            query_values=payload,
+        )
+
+    #     Todo:
     #     get/contact_message_attachment/{trade_id}/{attachment_id} • Get a trade chat attachment
 
     # Advertisement related API Methods
