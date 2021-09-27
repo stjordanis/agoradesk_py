@@ -45,3 +45,24 @@ def local_cash_sale(maker_api):
     yield ad_id
 
     maker_api.ad_delete(ad_id)
+
+
+@pytest.fixture
+def online_buy(maker_api):
+    actual_online_buy = maker_api.ad_create(
+        country_code="AU",
+        currency="LTC",
+        trade_type="ONLINE_BUY",
+        asset="XMR",
+        price_equation="coingeckoxmrltc*0.1",
+        track_max_amount=False,
+        require_trusted_by_advertiser=True,
+        online_provider="CRYPTOCURRENCY",
+    )
+
+    ad_id = None
+    if actual_online_buy["success"]:
+        ad_id = actual_online_buy["response"]["data"]["ad_id"]
+    yield ad_id
+
+    maker_api.ad_delete(ad_id)

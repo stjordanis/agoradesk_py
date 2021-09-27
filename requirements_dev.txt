@@ -1,7 +1,8 @@
 mypy==0.910
 pytest==6.2.5
 pytest-cov==2.12.1
+coverage>=6.0b1
 pylint==2.11.1
-setuptools==58.0.4
+setuptools==58.1.0
 tox==3.24.4
 flake8==3.9.2

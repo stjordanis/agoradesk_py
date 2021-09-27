@@ -18,7 +18,7 @@ def test_contact_create_get_info_send_and_get_msg_and_cancel(
 
     trade_id = created_trade["response"]["actions"]["contact_url"].split("/")[-1]
 
-    info = taker_api.contact_info(trade_id=trade_id)
+    info = taker_api.contact_info(trade_id)
     assert info["success"] is True
     response = info["response"]
     print(f"Contact Info: {response}")
@@ -39,3 +39,28 @@ def test_contact_create_get_info_send_and_get_msg_and_cancel(
 
     cancel_trade = taker_api.contact_cancel(trade_id=trade_id)
     assert cancel_trade["success"] is True
+
+
+def test_mark_as_paid(maker_api, taker_api, online_buy) -> None:
+    trade = taker_api.contact_create(ad_id=online_buy, amount=0.010)
+    assert trade["success"] is True
+
+    trade_id = trade["response"]["actions"]["contact_url"].split("/")[-1]
+
+    mark_as_paid = maker_api.contact_mark_as_paid(trade_id=trade_id)
+    assert mark_as_paid["success"] is True
+
+    info = taker_api.contact_info([trade_id])
+    assert info["success"] is True
+
+    cancel_trade = maker_api.contact_cancel(trade_id=trade_id)
+    assert cancel_trade["success"] is True
+
+
+def test_feedback(taker_api) -> None:
+    actual = taker_api.feedback(
+        username="TEST_ACCOUNT",
+        feedback="positive",
+        msg="Thanks for a great test trade",
+    )
+    assert actual["success"] is True

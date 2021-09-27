@@ -3,7 +3,7 @@
 """
 import json
 import logging
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Union
 
 import arrow
 import httpx
@@ -65,7 +65,7 @@ class AgoraDesk:
         logger.debug(f"Query Values: {query_values}")
         logger.debug(f"Query Values as Json:\n {json.dumps(query_values)}")
 
-        result = {
+        result: Dict[str, Union[str, int, bool, Dict]] = {
             "success": False,
             "message": "Invalid Method",
             "response": None,
@@ -103,7 +103,7 @@ class AgoraDesk:
 
             return result
         except httpx.ConnectError as error:
-            result["message"] = error
+            result["message"] = str(error)
             result["status"] = 600
             result["response"] = {"error": {"message": error}}
             return result
@@ -159,12 +159,29 @@ class AgoraDesk:
     # Trade related API Methods
     # ===========================
 
-    #     Todo:
     #     post/feedback/{username} • Give feedback to a user
+    def feedback(
+        self, username: str, feedback: str, msg: Optional[str]
+    ) -> Dict[str, Any]:
+        params = {"feedback": feedback}
+        if msg:
+            params["msg"] = msg
+        return self._api_call(
+            api_method=f"feedback/{username}",
+            http_method="POST",
+            query_values=params,
+        )
+
+    #     Todo:
     #     post/trade/contact_release/{trade_id} • Release trade escrow
     #     post/contact_fund/{trade_id} • Fund a trade
     #     post/contact_dispute/{trade_id} • Start a trade dispute
-    #     post/contact_mark_as_paid/{trade_id} • Mark a trade as paid\
+
+    #     post/contact_mark_as_paid/{trade_id} • Mark a trade as paid
+    def contact_mark_as_paid(self, trade_id: str) -> Dict[str, Any]:
+        return self._api_call(
+            api_method=f"contact_mark_as_paid/{trade_id}", http_method="POST"
+        )
 
     #     post/contact_cancel/{trade_id} • Cancel the trade
     def contact_cancel(
@@ -200,7 +217,7 @@ class AgoraDesk:
         amount: float,
         msg: Optional[str] = None,
     ) -> Dict[str, Any]:
-        payload = {"amount": amount}
+        payload: Dict[str, Any] = {"amount": amount}
         if msg:
             payload["msg"] = msg
         return self._api_call(
@@ -210,11 +227,17 @@ class AgoraDesk:
         )
 
     #     get/contact_info/{trade_id} • Get a trade by trade ID
-    def contact_info(self, trade_id: str) -> Dict[str, Any]:
-        return self._api_call(api_method=f"contact_info/{trade_id}")
-
-    #     Todo:
-    #     get/contact_info?contacts={trade_id1},{trade_id2}... • Get multiple trade by their trade IDs
+    def contact_info(self, trade_ids: Union[str, List]) -> Dict[str, Any]:
+        api_method = "contact_info"
+        if isinstance(trade_ids, list):
+            params = "?contacts="
+            for trade_id in trade_ids:
+                params += f"{trade_id},"
+            params = params[0:-1]
+        else:
+            params = f"/{trade_ids}"
+        api_method += params
+        return self._api_call(api_method=api_method)
 
     #     Todo: Add image upload functionality
     #     post/contact_message_post/{trade_id} • Send a chat message/attachment
@@ -258,7 +281,7 @@ class AgoraDesk:
         lat: Optional[float] = None,
         lon: Optional[float] = None,
     ) -> Dict[str, Any]:
-        params = {
+        params: Dict[str, Any] = {
             "countrycode": country_code,
             "currency": currency,
             "trade_type": trade_type,
@@ -328,7 +351,7 @@ class AgoraDesk:
         lon: Optional[float] = None,
         visible: Optional[bool] = None,
     ) -> Dict[str, Any]:
-        params = {}
+        params: Dict[str, Union[str, float, bool]] = {}
         if country_code:
             params["countrycode"] = country_code
         if currency:
@@ -373,6 +396,8 @@ class AgoraDesk:
             params["lat"] = lat
         if lon:
             params["lon"] = lon
+        if visible:
+            params["visible"] = 1 if visible else 0
 
         return self._api_call(
             api_method=f"ad/{ad_id}",
@@ -574,7 +599,8 @@ class AgoraDesk:
         params = self._generic_search_parameters(amount, page)
 
         return self._api_call(
-            api_method=f"{direction}-{main_currency}-with-cash/{exchange_currency}/{country_code}/{lat}/{lon}",
+            api_method=f"{direction}-{main_currency}-with-cash/"
+            f"{exchange_currency}/{country_code}/{lat}/{lon}",
             query_values=params,
         )
 
