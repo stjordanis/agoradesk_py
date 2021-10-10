@@ -3,7 +3,11 @@
 """
 import json
 import logging
-from typing import Optional, Dict, Any, List, Union
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Union
 
 import arrow
 import httpx
@@ -65,7 +69,7 @@ class AgoraDesk:
         logger.debug(f"Query Values: {query_values}")
         logger.debug(f"Query Values as Json:\n {json.dumps(query_values)}")
 
-        result: Dict[str, Union[str, int, bool, Dict]] = {
+        result: Dict[str, Any] = {
             "success": False,
             "message": "Invalid Method",
             "response": None,
@@ -227,7 +231,7 @@ class AgoraDesk:
         )
 
     #     get/contact_info/{trade_id} • Get a trade by trade ID
-    def contact_info(self, trade_ids: Union[str, List]) -> Dict[str, Any]:
+    def contact_info(self, trade_ids: Union[str, List[str]]) -> Dict[str, Any]:
         api_method = "contact_info"
         if isinstance(trade_ids, list):
             params = "?contacts="
@@ -252,7 +256,7 @@ class AgoraDesk:
         )
 
     #     Todo:
-    #     get/contact_message_attachment/{trade_id}/{attachment_id} • Get a trade chat attachment
+    #     get/contact_message_attachment/{trade_id}/{attachment_id}
 
     # Advertisement related API Methods
     # ================================
@@ -499,7 +503,8 @@ class AgoraDesk:
         params = self._generic_search_parameters(amount, page)
 
         return self._api_call(
-            api_method=f"{direction}-{main_currency}-online/{exchange_currency}{add_to_api_method}",
+            api_method=f"{direction}-{main_currency}-online/"
+            f"{exchange_currency}{add_to_api_method}",
             query_values=params,
         )
 

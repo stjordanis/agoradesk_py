@@ -40,18 +40,18 @@ if api_response["success"]:
 
 else:
      print(f"Error: {api_response['response']['error']}")
-     
+
 ```
 
 # Running Tests
 **be aware of the API requests limit of 20 req/h**
 
-TODO: fill in 
+TODO: fill in
 
 # Contribute
 Do you have an idea or found a bug in agoradesk_py? Please file an issue and make a PR! :)
 
 ## Support
 If you like the API and want to support me you can do so with
-Monero: 
+Monero:
     88NszkQU9qsafT9obFaDZSi7RvHSM76exJ1vvgVShTwM4HjvLr7XjJ7jDkFGnxr3UsDXLgT5t569N6uB7Gn4znjAFjUuN1q
