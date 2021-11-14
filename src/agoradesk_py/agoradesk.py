@@ -1,4 +1,6 @@
 """See https://agoradesk.com/api-docs/v1."""
+# pylint: disable=too-many-lines
+# Large API. Lots of lines can't be avoided.
 import json
 import logging
 from typing import Any
@@ -30,6 +32,9 @@ class AgoraDesk:
 
     Documentation: https://agoradesk.com/api-docs/v1
     """
+
+    # pylint: disable=too-many-public-methods
+    # API provides this many methods, I can't change that
 
     def __init__(self, api_key: Optional[str], debug: Optional[bool] = False) -> None:
         self.api_key = ""
@@ -218,6 +223,11 @@ class AgoraDesk:
     def feedback(
         self, username: str, feedback: str, msg: Optional[str]
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/setUserFeedback
+        """
+
         params = {"feedback": feedback}
         if msg:
             params["msg"] = msg
@@ -234,6 +244,10 @@ class AgoraDesk:
 
     #     post/contact_mark_as_paid/{trade_id} • Mark a trade as paid
     def contact_mark_as_paid(self, trade_id: str) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/markPaid
+        """
         return self._api_call(
             api_method=f"contact_mark_as_paid/{trade_id}", http_method="POST"
         )
@@ -243,6 +257,10 @@ class AgoraDesk:
         self,
         trade_id: str,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/cancelTrade
+        """
         return self._api_call(
             api_method=f"contact_cancel/{trade_id}",
             http_method="POST",
@@ -255,6 +273,10 @@ class AgoraDesk:
     def contact_messages(
         self, trade_id: str, after: Optional[arrow.Arrow] = None
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getTradeMessages
+        """
         if after:
             reply = self._api_call(
                 api_method=f"contact_messages/{trade_id}",
@@ -272,6 +294,10 @@ class AgoraDesk:
         amount: float,
         msg: Optional[str] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/startTrade
+        """
         payload: Dict[str, Any] = {"amount": amount}
         if msg:
             payload["msg"] = msg
@@ -283,6 +309,11 @@ class AgoraDesk:
 
     #     get/contact_info/{trade_id} • Get a trade by trade ID
     def contact_info(self, trade_ids: Union[str, List[str]]) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getTradeById and
+        https://agoradesk.com/api-docs/v1#operation/getTradesInBulk
+        """
         api_method = "contact_info"
         if isinstance(trade_ids, list):
             params = "?contacts="
@@ -299,6 +330,10 @@ class AgoraDesk:
     def contact_message_post(
         self, trade_id: str, msg: Optional[str] = None
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/sendChatMessage
+        """
         payload = {"msg": msg}
         return self._api_call(
             api_method=f"contact_message_post/{trade_id}",
@@ -336,6 +371,17 @@ class AgoraDesk:
         lat: Optional[float] = None,
         lon: Optional[float] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/createAd
+        """
+
+        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-branches
+        # API takes this many arguments, I can't change that
+        # Too many locals and too many branches goes hand in hand
+        # with too many arguments
         params: Dict[str, Any] = {
             "countrycode": country_code,
             "currency": currency,
@@ -406,6 +452,19 @@ class AgoraDesk:
         lon: Optional[float] = None,
         visible: Optional[bool] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/editAd
+        """
+
+        # pylint: disable=invalid-name
+        # Don't want to change the name of the method from what the API call is
+        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-locals
+        # pylint: disable=too-many-branches
+        # API takes this many arguments, I can't change that
+        # Too many locals and too many branches goes hand in hand
+        # with too many arguments
         params: Dict[str, Union[str, float, bool]] = {}
         if country_code:
             params["countrycode"] = country_code
@@ -461,6 +520,10 @@ class AgoraDesk:
         )
 
     def ad_equation(self, ad_id: str, price_equation: str) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/updateFormula
+        """
         return self._api_call(
             api_method=f"ad-equation/{ad_id}",
             http_method="POST",
@@ -468,6 +531,10 @@ class AgoraDesk:
         )
 
     def ad_delete(self, ad_id: str) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/deleteAd
+        """
         return self._api_call(api_method=f"ad-delete/{ad_id}", http_method="POST")
 
     def ads(
@@ -479,6 +546,13 @@ class AgoraDesk:
         asset: Optional[str] = None,
         payment_method_code: Optional[str] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getYourAds
+        """
+
+        # pylint: disable=too-many-arguments
+        # API takes this many arguments, I can't change that
 
         params = {}
         if country_code:
@@ -502,6 +576,11 @@ class AgoraDesk:
         return self._api_call(api_method="ads", query_values=params)
 
     def ad_get(self, ad_ids: List[str]) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getAdById and
+        https://agoradesk.com/api-docs/v1#operation/getAdsInBulk
+        """
         api_method = "ad-get"
         params = None
         ids = str(ad_ids)[1:-1].replace(" ", "").replace("'", "")
@@ -513,18 +592,35 @@ class AgoraDesk:
         return self._api_call(api_method=api_method, query_values=params)
 
     def payment_methods(self, country_code: Optional[str] = None) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/paymentMethods and
+        https://agoradesk.com/api-docs/v1#operation/countryHasPaymentMethod
+        """
         api_method = "payment_methods"
         if country_code:
             api_method += f"/{country_code}"
         return self._api_call(api_method=api_method)
 
     def country_codes(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/countryCodes
+        """
         return self._api_call(api_method="countrycodes")
 
     def currencies(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/currencyCodes
+        """
         return self._api_call(api_method="currencies")
 
     def equation(self, price_equation: str, currency: str) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/priceFormula
+        """
         return self._api_call(
             api_method="equation",
             http_method="POST",
@@ -545,6 +641,8 @@ class AgoraDesk:
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
 
+        # pylint: disable=too-many-arguments
+
         add_to_api_method = ""
         if country_code:
             add_to_api_method = f"/{country_code}"
@@ -559,7 +657,8 @@ class AgoraDesk:
             query_values=params,
         )
 
-    def _generic_search_parameters(self, amount, page):
+    @staticmethod
+    def _generic_search_parameters(amount, page):
         params = None
         if amount and not page:
             params = {"amount": f"{amount}"}
@@ -577,6 +676,16 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getOnlineSellXmrByCurrencyCode and
+        https://agoradesk.com/api-docs/v1#operation/getOnlineSellXmrByCurrencyCodeAndCountryCode and                    # noqa: E501   pylint: disable=line-too-long
+        https://agoradesk.com/api-docs/v1#operation/getOnlineSellXmrByCurrencyCodeAndPaymentMethodCode and              # noqa: E501   pylint: disable=line-too-long
+        https://agoradesk.com/api-docs/v1#operation/getOnlineSellXmrByCurrencyCodeAndCountryCodeAndPaymentMethodCode    # noqa: E501   pylint: disable=line-too-long
+        """
+
+        # pylint: disable=too-many-arguments
+
         return self._generic_online(
             direction="buy",
             main_currency="monero",
@@ -595,6 +704,16 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getOnlineSellBtcByCurrencyCode
+        https://agoradesk.com/api-docs/v1#operation/getOnlineSellBtcByCurrencyCodeAndCountryCode and                    # noqa: E501   pylint: disable=line-too-long
+        https://agoradesk.com/api-docs/v1#operation/getOnlineSellBtcByCurrencyCodeAndPaymentMethodCode and              # noqa: E501   pylint: disable=line-too-long
+        https://agoradesk.com/api-docs/v1#operation/getOnlineSellBtcByCurrencyCodeAndCountryCodeAndPaymentMethodCode    # noqa: E501   pylint: disable=line-too-long
+        """
+
+        # pylint: disable=too-many-arguments
+
         return self._generic_online(
             direction="buy",
             main_currency="bitcoins",
@@ -613,6 +732,16 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getOnlineBuyXmrByCurrencyCode
+        https://agoradesk.com/api-docs/v1#operation/getOnlineBuyXmrByCurrencyCodeAndCountryCode and                    # noqa: E501   pylint: disable=line-too-long
+        https://agoradesk.com/api-docs/v1#operation/getOnlineBuyXmrByCurrencyCodeAndPaymentMethodCode and              # noqa: E501   pylint: disable=line-too-long
+        https://agoradesk.com/api-docs/v1#operation/getOnlineBuyXmrByCurrencyCodeAndCountryCodeAndPaymentMethodCode    # noqa: E501   pylint: disable=line-too-long
+        """
+
+        # pylint: disable=too-many-arguments
+
         return self._generic_online(
             direction="sell",
             main_currency="monero",
@@ -631,6 +760,16 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getOnlineBuyBtcByCurrencyCode
+        https://agoradesk.com/api-docs/v1#operation/getOnlineBuyBtcByCurrencyCodeAndCountryCode and                    # noqa: E501   pylint: disable=line-too-long
+        https://agoradesk.com/api-docs/v1#operation/getOnlineBuyBtcByCurrencyCodeAndPaymentMethodCode and              # noqa: E501   pylint: disable=line-too-long
+        https://agoradesk.com/api-docs/v1#operation/getOnlineBuyBtcByCurrencyCodeAndCountryCodeAndPaymentMethodCode    # noqa: E501   pylint: disable=line-too-long
+        """
+
+        # pylint: disable=too-many-arguments
+
         return self._generic_online(
             direction="sell",
             main_currency="bitcoins",
@@ -652,6 +791,8 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        # pylint: disable=too-many-arguments
+
         params = self._generic_search_parameters(amount, page)
 
         return self._api_call(
@@ -669,6 +810,13 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getLocalSellXmrByCurrencyCodeAndCountryCode    # noqa: E501   pylint: disable=line-too-long
+        """
+
+        # pylint: disable=too-many-arguments
+
         return self._generic_cash(
             direction="buy",
             main_currency="monero",
@@ -689,6 +837,13 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getLocalSellBtcByCurrencyCodeAndCountryCode    # noqa: E501   pylint: disable=line-too-long
+        """
+
+        # pylint: disable=too-many-arguments
+
         return self._generic_cash(
             direction="buy",
             main_currency="bitcoins",
@@ -709,6 +864,13 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getLocalBuyXmrByCurrencyCodeAndCountryCode    # noqa: E501   pylint: disable=line-too-long
+        """
+
+        # pylint: disable=too-many-arguments
+
         return self._generic_cash(
             direction="sell",
             main_currency="monero",
@@ -729,6 +891,13 @@ class AgoraDesk:
         amount: Optional[float] = None,
         page: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getLocalBuyBtcByCurrencyCodeAndCountryCode    # noqa: E501   pylint: disable=line-too-long
+        """
+
+        # pylint: disable=too-many-arguments
+
         return self._generic_cash(
             direction="sell",
             main_currency="bitcoins",
@@ -746,33 +915,70 @@ class AgoraDesk:
     def moneroaverage(
         self, currency: Optional[str] = "ticker-all-currencies"
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getXmrTicker and
+        https://agoradesk.com/api-docs/v1#operation/getXmrTickerByCurrencyCode
+        """
         return self._api_call(api_method=f"moneroaverage/{currency}")
 
     # Wallet related API Methods
     # ===========================
 
     def wallet(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getBtcWallet
+        """
         return self._api_call(api_method="wallet")
 
     def wallet_balance(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getBtcWalletBalance
+        """
         return self._api_call(api_method="wallet-balance")
 
     def wallet_xmr(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getXmrWallet
+        """
         return self._api_call(api_method="wallet/XMR")
 
     def wallet_balance_xmr(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getXmrWalletBalance
+        """
         return self._api_call(api_method="wallet-balance/XMR")
 
     def wallet_addr(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getBtcAddress
+        """
         return self._api_call(api_method="wallet-addr")
 
     def wallet_addr_xmr(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getXMRAddress
+        """
         return self._api_call(api_method="wallet-addr/XMR")
 
     def fees(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getBtcFee
+        """
         return self._api_call(api_method="fees")
 
     def fees_xmr(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getXmrFee
+        """
         return self._api_call(api_method="fees/XMR")
 
     def wallet_send(
@@ -783,6 +989,12 @@ class AgoraDesk:
         fee_level: str,
         otp: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/withdrawBtc
+        """
+        # pylint: disable=too-many-arguments
+
         params = {
             "address": address,
             "amount": amount,
@@ -804,6 +1016,12 @@ class AgoraDesk:
         fee_level: str,
         otp: Optional[int] = None,
     ) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/withdrawXmr
+        """
+        # pylint: disable=too-many-arguments
+
         params = {
             "address": address,
             "amount": amount,

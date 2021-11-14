@@ -17,13 +17,6 @@ repos:
       - id: pycln
         args: [--config=pyproject.toml]
 
-  - repo: https://github.com/psf/black
-    rev: 21.9b0
-    hooks:
-      - id: black
-        args: [ --safe ]
-        language_version: python3
-
   - repo: https://github.com/asottile/reorder_python_imports
     rev: v2.6.0
     hooks:
@@ -41,6 +34,13 @@ repos:
     hooks:
       - id: docformatter
         args: [--in-place]
+
+  - repo: https://github.com/psf/black
+    rev: 21.9b0
+    hooks:
+      - id: black
+        args: [ --safe ]
+        language_version: python3
 
   - repo: https://github.com/pycqa/flake8
     rev: 3.9.2
