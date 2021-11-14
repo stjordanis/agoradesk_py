@@ -1,6 +1,4 @@
-"""
-    See https://agoradesk.com/api-docs/v1
-"""
+"""See https://agoradesk.com/api-docs/v1."""
 import json
 import logging
 from typing import Any
@@ -28,8 +26,7 @@ URI_API = "https://agoradesk.com/api/v1/"
 
 
 class AgoraDesk:
-    """
-    AgoraDesk / LocalMonero API object
+    """AgoraDesk / LocalMonero API object.
 
     Documentation: https://agoradesk.com/api-docs/v1
     """
@@ -63,11 +60,11 @@ class AgoraDesk:
             "Authorization": self.api_key,
         }
 
-        logger.debug(f"API Call URL: {api_call_url}")
-        logger.debug(f"Headers     : {headers}")
-        logger.debug(f"HTTP Method : {http_method}")
-        logger.debug(f"Query Values: {query_values}")
-        logger.debug(f"Query Values as Json:\n {json.dumps(query_values)}")
+        logger.debug("API Call URL: %s", api_call_url)
+        logger.debug("Headers     : %s", headers)
+        logger.debug("HTTP Method : %s", http_method)
+        logger.debug("Query Values: %s", query_values)
+        logger.debug("Query Values as Json:\n%s", json.dumps(query_values))
 
         result: Dict[str, Any] = {
             "success": False,
@@ -122,42 +119,96 @@ class AgoraDesk:
     # ===========================
 
     def account_info(self, username: str) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getUserByUsername
+        """
         return self._api_call(api_method=f"account_info/{username}")
 
     def dashboard(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getUserDashboard
+        """
         return self._api_call(api_method="dashboard")
 
     def dashboard_buyer(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getUserDashboardBuyer
+        """
         return self._api_call(api_method="dashboard/buyer")
 
     def dashboard_seller(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getUserDashboardSeller
+        """
         return self._api_call(api_method="dashboard/seller")
 
     def dashboard_canceled(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getUserDashboardCanceled
+        """
         return self._api_call(api_method="dashboard/canceled")
 
     def dashboard_closed(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getUserDashboardClosed
+        """
         return self._api_call(api_method="dashboard/closed")
 
     def dashboard_released(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getUserDashboardReleased
+        """
+
         return self._api_call(api_method="dashboard/released")
 
     def logout(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/logout
+        """
+
         return self._api_call(api_method="logout", http_method="POST")
 
     def myself(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getTokenOwnerUserData
+        """
+
         return self._api_call(api_method="myself")
 
     def notifications(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getUserNotifications
+        """
+
         return self._api_call(api_method="notifications")
 
     def notifications_mark_as_read(self, notification_id: str) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/markNotificationRead
+        """
+
         return self._api_call(
             api_method=f"notifications/mark_as_read/{notification_id}",
             http_method="POST",
         )
 
     def recent_messages(self) -> Dict[str, Any]:
+        """See Agoradesk API.
+
+        https://agoradesk.com/api-docs/v1#operation/getRecemtMessages
+        """
+
         return self._api_call(api_method="recent_messages")
 
     # Trade related API Methods

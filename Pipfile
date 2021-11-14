@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+arrow = "*"
+httpx = "*"
+toml = "*"
+
+[dev-packages]
+pre-commit = "*"
+pytest = "*"
+pytest-cov = "*"
+pylint = "*"
+setuptools = "*"
+agoradesk-py = {editable = true, path = "."}
+
+[requires]
+python_version = "3.9"
