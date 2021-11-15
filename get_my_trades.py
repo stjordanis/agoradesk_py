@@ -1,3 +1,5 @@
+"""Sample code to retrieve available trades and wallet transtions."""
+# pylint: disable=unsubscriptable-object, invalid-name
 import os
 
 from agoradesk_py.agoradesk import AgoraDesk
@@ -7,7 +9,7 @@ if __name__ == "__main__":
     api = AgoraDesk(api_key=os.environ["api_key"])
 
     # Get information about logged in user
-    who_am_i = api.myself()["response"]["data"]
+    me = api.myself()["response"]["data"]
 
     # Get information about all released trades
     api_response = api.dashboard_released()
@@ -19,9 +21,9 @@ if __name__ == "__main__":
     for trade in trades:
         trade_data = trade["data"]
         trade_action = None
-        if who_am_i["username"] == trade_data["buyer"]["username"]:
+        if me["username"] == trade_data["buyer"]["username"]:
             trade_action = "bought"
-        elif who_am_i["username"] == trade_data["seller"]["username"]:
+        elif me["username"] == trade_data["seller"]["username"]:
             trade_action = "sold"
         print(
             f"I have {trade_action} "
@@ -41,21 +43,3 @@ if __name__ == "__main__":
             f"Sent {transaction['amount']} XMR on {transaction['created_at']} "
             f"for {transaction['description']}"
         )
-
-    notifications = api.notifications()["response"]["data"]
-    print()
-    print("Notifications:")
-    print("==============")
-    for notify in notifications:
-        print(f"{notify['created_at']} {notify['msg']}  ({notify['id']})")
-
-    api_response = api.notifications_mark_as_read(
-        notification_id="7ca4d852-b2ee-4ca9-a4d8-52b2eeaca913"
-    )
-    print()
-    print("Notifications/mark_as_read:")
-    print("==============")
-    if not api_response["success"]:
-        print(f"Error: {api_response['response']['error']}")
-    if "data" in api_response["response"]:
-        print(api_response["response"]["data"])

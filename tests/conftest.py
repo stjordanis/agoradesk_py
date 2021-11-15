@@ -1,3 +1,5 @@
+"""Containing the PyTest fixtures."""
+# pylint: disable=duplicate-code
 import os
 
 import pytest
@@ -11,18 +13,22 @@ __version__ = "0.1.0"
 
 @pytest.fixture(scope="session")
 def maker_api():
+    """Create an AgoraDesk session for creating ads and most other single user
+    tests."""
     api_key = os.environ["api_key"]
     yield AgoraDesk(api_key=api_key, debug=True)
 
 
 @pytest.fixture(scope="session")
 def taker_api():
+    """Create and AgoraDesk session for opening trades from ads."""
     api_key = os.environ["api_key2"]
     yield AgoraDesk(api_key=api_key, debug=True)
 
 
 @pytest.fixture
 def local_cash_sale(maker_api):
+    """Create a local cash sale advertisement."""
     actual_local_buy = maker_api.ad_create(
         country_code="AU",
         currency="AUD",
@@ -49,6 +55,7 @@ def local_cash_sale(maker_api):
 
 @pytest.fixture
 def online_buy(maker_api):
+    """Creates an online buy advertisement."""
     actual_online_buy = maker_api.ad_create(
         country_code="AU",
         currency="LTC",

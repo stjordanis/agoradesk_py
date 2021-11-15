@@ -1,3 +1,5 @@
+"""Contains pytest tests for trade (contact) related api calls."""
+# pylint: disable=missing-function-docstring
 import arrow
 
 __author__ = "marvin8"
@@ -42,7 +44,7 @@ def test_contact_create_get_info_send_and_get_msg_and_cancel(
 
 
 def test_mark_as_paid(maker_api, taker_api, online_buy) -> None:
-    trade = taker_api.contact_create(ad_id=online_buy, amount=0.010)
+    trade = taker_api.contact_create(ad_id=online_buy, amount=0.0010)
     assert trade["success"] is True
 
     trade_id = trade["response"]["actions"]["contact_url"].split("/")[-1]
