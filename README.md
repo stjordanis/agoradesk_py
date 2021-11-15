@@ -4,18 +4,17 @@ Python interface for [AgoraDesk.com/LocalMonero.co API](https://agoradesk.com/ap
 This is currently not a complete implementation of the Agoradesk API.
 
 The following API calls are currently **not** supported.
--     #     post/trade/contact_release/{trade_id} • Release trade escrow
-    #     post/contact_fund/{trade_id} • Fund a trade
-    #     post/contact_dispute/{trade_id} • Start a trade dispute
-    #     post/contact_escrow/{trade_id} • Enable escrow
-    #     Todo: Add image upload functionality
-    #     post/contact_message_post/{trade_id} • Send a chat message/attachment
-    #     get/contact_message_attachment/{trade_id}/{attachment_id}
+- /trade/contact_release/{trade_id} • Release trade escrow
+- /contact_fund/{trade_id} • Fund a trade
+- /contact_dispute/{trade_id} • Start a trade dispute
+- /contact_escrow/{trade_id} • Enable escrow
+- Image uploading in chat
+- /contact_message_attachment/{trade_id}/{attachment_id} • Get a trade chat attachment
 
 
-I offer no warranty of any kind -- use this at your own risk!
+**I offer no warranty of any kind -- use this at your own risk!**
 
-(I am not associated with AgoraDesk.com or LocalMonero.co.)
+*I am not associated with AgoraDesk.com or LocalMonero.co.*
 
 # Requirements:
 * httpx
@@ -24,6 +23,8 @@ I offer no warranty of any kind -- use this at your own risk!
 
 # Install
 `python setup.py install`
+
+or
 
 `pip install agoradesk_py`
 
