@@ -16,6 +16,7 @@ pylint = "*"
 setuptools = "*"
 agoradesk-py = {editable = true, path = "."}
 pytest-testmon = "*"
+build = "*"
 
 [requires]
 python_version = "3.9"
