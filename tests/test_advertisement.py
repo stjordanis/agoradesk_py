@@ -1,3 +1,6 @@
+"""Contains pytest tests for advertisement related api calls."""
+# pylint: disable=missing-function-docstring
+
 __author__ = "marvin8"
 __copyright__ = "(C) 2021 https://codeberg.org/MarvinsCryptoTools/agoradesk_py"
 __version__ = "0.1.0"

@@ -1,3 +1,5 @@
+"""Contains pytest tests for authentication related api calls."""
+# pylint: disable=missing-function-docstring
 from agoradesk_py.agoradesk import AgoraDesk
 
 __author__ = "marvin8"
